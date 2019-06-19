@@ -11,13 +11,7 @@ pool:
   # do this before your build tasks
 
 steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: restore
-    projects: '**/*.csproj'
-    feedsToUse: config
-    nugetConfigPath: NuGet.config    # Relative to root of the repository
-    externalFeedCredentials: poojaTomar2
+
 # ...
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
@@ -81,17 +75,6 @@ steps:
 # ...
 # do this near the end of your pipeline in most cases
 - task: PublishBuildArtifacts@1
-
-# ...
-# do this near the end of your pipeline in most cases
-- script: dotnet pack /p:PackageVersion=$(version)  # define version variable elsewhere in your pipeline
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    nuGetFeedType: external
-    publishFeedCredentials: 'poojaTomar2'
-    versioningScheme: byEnvVar
-    versionEnvVar: version
 
 # ...
 # do this after you've built your app, near the end of your pipeline in most cases
