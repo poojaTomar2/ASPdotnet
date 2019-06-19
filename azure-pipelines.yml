@@ -5,6 +5,7 @@
 
 trigger:
 - master
+
 pool:
   vmImage: 'ubuntu-latest'
   # do this before your build tasks
