@@ -47,10 +47,18 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-- task: AzureRmWebAppDeployment@4
+
+# ...
+# do this after you've built your app, near the end of your pipeline in most cases
+# for example, you do this before you deploy to an Azure web app on Windows
+- task: DotNetCoreCLI@2
   inputs:
-    ConnectionType: 'AzureRM'
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+- task: AzureRmWebAppDeployment@3
+  inputs:
     azureSubscription: 'Free Trial (64e8679a-483a-4336-82d1-6b1b66b6ca42)'
-    appType: 'webApp'
     WebAppName: 'jenkinsap'
-    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    Package: $(System.ArtifactsDirectory)/**/*.zip
